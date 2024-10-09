@@ -29,7 +29,7 @@ public class ProductService {
 
     public ProductResponseDto getProductInfo(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("해당 번호의 상품이 존재하지 않습니다."));
-        List<Review> reviews = reviewRepository.findAllByProductIdOrderByIdDesc(productId);
+        List<Review> reviews = reviewRepository.findAllByProductIdOrderByCreatedAtDesc(productId);
         List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
 
         for (Review review : reviews) reviewResponseDtoList.add(new ReviewResponseDto(review));

@@ -1,7 +1,7 @@
 package org.hanghae99.company.review.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
-import org.hanghae99.company.review.dto.ReviewRequestDto;
 import org.hanghae99.company.review.dto.ReviewResponseDto;
 import org.hanghae99.company.review.service.ReviewService;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class ReviewController {
     private final ReviewService reviewService;
 
     @PostMapping("/products/{productId}/reviews")
-    public ResponseEntity<ReviewResponseDto> createReview(@RequestPart MultipartFile multipartFile, @RequestBody ReviewRequestDto reviewRequestDto, @PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.createReview(multipartFile, reviewRequestDto, productId));
+    public ResponseEntity<ReviewResponseDto> createReview(@PathVariable Long productId, @RequestPart(required = false) MultipartFile multipartFile, @RequestParam("reviewRequestDto") String reviewRequestDto) throws JsonProcessingException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(reviewService.createReview(productId, multipartFile, reviewRequestDto));
     }
 }

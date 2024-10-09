@@ -1,5 +1,7 @@
 package org.hanghae99.company.review.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.hanghae99.company.product.entity.Product;
 import org.hanghae99.company.product.repository.ProductRepository;
@@ -18,12 +20,15 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
 
-    public ReviewResponseDto createReview(MultipartFile multipartFile, ReviewRequestDto reviewRequestDto, Long productId) {
+    public ReviewResponseDto createReview(Long productId, MultipartFile multipartFile, String reviewRequestDto_temp) throws JsonProcessingException {
+        ReviewRequestDto reviewRequestDto = conversionDto(reviewRequestDto_temp);
+
         if (reviewRepository.findByUserId(reviewRequestDto.getUserId()).isPresent()) throw new IllegalArgumentException("해당 상품에 이미 리뷰를 작성하셨습니다.");
 
         Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("Product not found"));
 
-        String filename = multipartFile.getOriginalFilename();
+        String filename = null;
+        if (multipartFile != null) filename = multipartFile.getOriginalFilename();
         reviewRequestDto.setImageUrl(filename);
         Review review = new Review(reviewRequestDto, product);
         reviewRepository.save(review);
@@ -37,5 +42,11 @@ public class ReviewService {
         productRepository.save(product);
 
         return new ReviewResponseDto(review);
+    }
+
+    //json타입으로 변환
+    public ReviewRequestDto conversionDto(String reviewRequestDto) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.readValue(reviewRequestDto, ReviewRequestDto.class);
     }
 }
