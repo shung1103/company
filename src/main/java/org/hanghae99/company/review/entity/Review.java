@@ -14,12 +14,13 @@ import org.hanghae99.company.review.dto.ReviewRequestDto;
 public class Review extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "review_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "user_id")
     private Long userId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "reviewScore")
     private Integer score;
 
     @Column(nullable = false, name = "review_content")
