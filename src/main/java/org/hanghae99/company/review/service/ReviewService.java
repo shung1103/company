@@ -23,7 +23,7 @@ public class ReviewService {
     public ReviewResponseDto createReview(Long productId, MultipartFile multipartFile, String reviewRequestDto_temp) throws JsonProcessingException {
         ReviewRequestDto reviewRequestDto = conversionDto(reviewRequestDto_temp);
 
-        if (reviewRepository.findByUserId(reviewRequestDto.getUserId()).isPresent()) throw new IllegalArgumentException("해당 상품에 이미 리뷰를 작성하셨습니다.");
+        if (reviewRepository.findByProductIdAndUserId(productId, reviewRequestDto.getUserId()).isPresent()) throw new IllegalArgumentException("해당 상품에 이미 리뷰를 작성하셨습니다.");
 
         Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("Product not found"));
 
