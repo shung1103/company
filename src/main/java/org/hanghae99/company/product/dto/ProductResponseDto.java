@@ -9,14 +9,12 @@ import java.util.stream.Collectors;
 
 @Getter
 public class ProductResponseDto {
-    private Long id;
     private Long totalCount;
     private Double score;
     private Integer cursor;
     private List<ReviewResponseDto> reviews;
 
     public ProductResponseDto(Product product) {
-        this.id = product.getId();
         this.totalCount = product.getReviewCount();
         this.score = product.getScore();
         this.reviews = product.getReviews().stream().map(ReviewResponseDto::new).collect(Collectors.toList());

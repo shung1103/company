@@ -1,5 +1,6 @@
 package org.hanghae99.company.review.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -19,6 +20,7 @@ public class ReviewRequestDto {
     @NotBlank(message = "필수 입력 값입니다.")
     private String content;
 
+    @JsonIgnore
     @Setter
     private String imageUrl;
 }

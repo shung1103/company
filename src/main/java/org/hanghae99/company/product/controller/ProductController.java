@@ -5,6 +5,8 @@ import org.hanghae99.company.common.dto.ApiResponseDto;
 import org.hanghae99.company.product.dto.ProductRequestDto;
 import org.hanghae99.company.product.dto.ProductResponseDto;
 import org.hanghae99.company.product.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -14,17 +16,17 @@ public class ProductController {
     private final ProductService productService;
 
     @PostMapping("/product")
-    public ProductResponseDto createProduct(@RequestBody ProductRequestDto productRequestDto) {
-        return productService.createProduct(productRequestDto);
+    public ResponseEntity<ProductResponseDto> createProduct(@RequestBody ProductRequestDto productRequestDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(productService.createProduct(productRequestDto));
     }
 
     @GetMapping("/products/{productId}/reviews")
-    public ProductResponseDto getProductInfo(@PathVariable Long productId) {
-        return productService.getProductInfo(productId);
+    public ResponseEntity<ProductResponseDto> getProductInfo(@PathVariable Long productId) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductInfo(productId));
     }
 
     @DeleteMapping("/product/{productId}")
-    public ApiResponseDto deleteProduct(@PathVariable Long productId) {
-        return productService.deleteProduct(productId);
+    public ResponseEntity<ApiResponseDto> deleteProduct(@PathVariable Long productId) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.deleteProduct(productId));
     }
 }
