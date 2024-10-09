@@ -8,6 +8,7 @@ import org.hanghae99.company.product.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.data.domain.Pageable;
 
 @RestController
 @RequiredArgsConstructor
@@ -21,8 +22,8 @@ public class ProductController {
     }
 
     @GetMapping("/products/{productId}/reviews")
-    public ResponseEntity<ProductResponseDto> getProductInfo(@PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductInfo(productId));
+    public ResponseEntity<ProductResponseDto> getProductInfo(@PathVariable Long productId, Pageable pageable) {
+        return ResponseEntity.status(HttpStatus.OK).body(productService.getProductInfo(productId, pageable));
     }
 
     @DeleteMapping("/product/{productId}")
