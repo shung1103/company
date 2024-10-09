@@ -37,7 +37,7 @@ public class ReviewService {
         long totalCount = reviewList.size();
         double sum = 0.0;
         for (Review reviewItem : reviewList) sum += reviewItem.getScore();
-        double average = sum / totalCount;
+        double average = Math.round((sum / totalCount) * 10) / 10.0;
         product.update(totalCount, average);
         productRepository.save(product);
 
