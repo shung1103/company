@@ -9,6 +9,7 @@ import org.hanghae99.company.product.repository.ProductRepository;
 import org.hanghae99.company.review.dto.ReviewResponseDto;
 import org.hanghae99.company.review.entity.Review;
 import org.hanghae99.company.review.repository.ReviewRepository;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.data.domain.Pageable;
@@ -28,11 +29,18 @@ public class ProductService {
         return new ProductResponseDto(product);
     }
 
-    public ProductResponseDto getProductInfo(Long productId, Pageable pageable) {
+    public ProductResponseDto getProductInfo(Long productId, Pageable pageable, Long cursor) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("해당 번호의 상품이 존재하지 않습니다."));
-        List<Review> reviews = reviewRepository.findAllByProductIdOrderByCreatedAtDesc(productId, pageable);
-        List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
 
+        Page<Review> reviews;
+        if (cursor == null) {
+            reviews = reviewRepository.findAllByProductIdOrderByCreatedAtDesc(productId, pageable);
+        }
+        else {
+            reviews = reviewRepository.findReviewNextPage(cursor, productId, pageable);
+        }
+
+        List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
         for (Review review : reviews) reviewResponseDtoList.add(new ReviewResponseDto(review));
 
         return new ProductResponseDto(product, reviewResponseDtoList);
