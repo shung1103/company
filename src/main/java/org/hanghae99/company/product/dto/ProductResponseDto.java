@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 public class ProductResponseDto {
     private Long totalCount;
     private Double score;
-    private Integer cursor;
+    private Long cursor;
     private List<ReviewResponseDto> reviews;
 
     public ProductResponseDto(Product product) {
@@ -20,9 +20,10 @@ public class ProductResponseDto {
         this.reviews = product.getReviews().stream().map(ReviewResponseDto::new).collect(Collectors.toList());
     }
 
-    public ProductResponseDto(Product product, List<ReviewResponseDto> reviewResponseDtoList) {
+    public ProductResponseDto(Product product, Long cursor, List<ReviewResponseDto> reviewResponseDtoList) {
         this.totalCount = product.getReviewCount();
         this.score = product.getScore();
+        this.cursor = cursor;
         this.reviews = reviewResponseDtoList;
     }
 }

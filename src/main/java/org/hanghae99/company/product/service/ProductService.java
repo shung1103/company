@@ -43,7 +43,7 @@ public class ProductService {
         List<ReviewResponseDto> reviewResponseDtoList = new ArrayList<>();
         for (Review review : reviews) reviewResponseDtoList.add(new ReviewResponseDto(review));
 
-        return new ProductResponseDto(product, reviewResponseDtoList);
+        return new ProductResponseDto(product, cursor, reviewResponseDtoList);
     }
 
     public ApiResponseDto deleteProduct(Long productId) {
