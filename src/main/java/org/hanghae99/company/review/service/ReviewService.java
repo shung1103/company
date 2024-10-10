@@ -10,6 +10,8 @@ import org.hanghae99.company.review.dto.ReviewResponseDto;
 import org.hanghae99.company.review.entity.Review;
 import org.hanghae99.company.review.repository.ReviewRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
@@ -20,6 +22,7 @@ public class ReviewService {
     private final ReviewRepository reviewRepository;
     private final ProductRepository productRepository;
 
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     public ReviewResponseDto createReview(Long productId, MultipartFile multipartFile, String reviewRequestDto_temp) throws JsonProcessingException {
         ReviewRequestDto reviewRequestDto = conversionDto(reviewRequestDto_temp);
 
