@@ -29,9 +29,6 @@ public class Review extends TimeStamped {
     @Column(name = "review_image")
     private String imageUrl;
 
-    @Version
-    private Integer version;
-
     @ManyToOne
     @JoinColumn(name = "id")
     private Product product;
