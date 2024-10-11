@@ -1,7 +1,6 @@
 package org.hanghae99.company.product.service;
 
 import lombok.RequiredArgsConstructor;
-import org.hanghae99.company.common.dto.ApiResponseDto;
 import org.hanghae99.company.product.dto.ProductRequestDto;
 import org.hanghae99.company.product.dto.ProductResponseDto;
 import org.hanghae99.company.product.entity.Product;
@@ -11,7 +10,6 @@ import org.hanghae99.company.review.entity.Review;
 import org.hanghae99.company.review.repository.ReviewRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -44,11 +42,5 @@ public class ProductService {
         for (Review review : reviews) reviewResponseDtoList.add(new ReviewResponseDto(review));
 
         return new ProductResponseDto(product, cursor, reviewResponseDtoList);
-    }
-
-    public ApiResponseDto deleteProduct(Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("Product not found"));
-        productRepository.delete(product);
-        return new ApiResponseDto("상품이 삭제 되었습니다.", HttpStatus.OK.value());
     }
 }
