@@ -26,6 +26,9 @@ public class Product extends TimeStamped {
     @Column(name = "score", nullable = false)
     private Double score;
 
+    @Version
+    private Integer version;
+
     @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
     private List<Review> reviews  = new ArrayList<>();
 
