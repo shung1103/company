@@ -18,7 +18,7 @@ public class ProductController {
 
     @PostMapping("/products/{productId}/notifications/re-stock")
     public ResponseEntity<ApiResponseDto> sendReStockNotification(@PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.sendReStockNotification(productId));
+        return ResponseEntity.status(HttpStatus.OK).body(productService.sendReStockNotification(productId));
     }
 
     @PostMapping("/admin/products/{productId}/notifications/re-stock")

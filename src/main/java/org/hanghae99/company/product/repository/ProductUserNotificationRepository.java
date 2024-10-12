@@ -7,4 +7,6 @@ import java.util.Queue;
 
 public interface ProductUserNotificationRepository extends JpaRepository<ProductUserNotification, Long> {
     Queue<ProductUserNotification> findAllByProductId(Long productId);
+
+    boolean existsByProductId(Long productId);
 }
