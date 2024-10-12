@@ -4,11 +4,6 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hanghae99.company.common.entity.TimeStamped;
-import org.hanghae99.company.product.dto.ProductRequestDto;
-import org.hanghae99.company.review.entity.Review;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -17,25 +12,18 @@ import java.util.List;
 public class Product extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
+    @Column(name = "product_id")
     private Long id;
 
-    @Column(name = "reviewCount", nullable = false)
-    private Long reviewCount;
+    @Column(nullable = false)
+    private Long quantity;
 
-    @Column(name = "score", nullable = false)
-    private Double score;
+    @Column(nullable = false)
+    private Long restockCount;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.PERSIST)
-    private List<Review> reviews  = new ArrayList<>();
+    public void updateReStockCount(Long restockCount) { this.restockCount = restockCount; }
 
-    public Product(ProductRequestDto productRequestDto) {
-        this.reviewCount = productRequestDto.getReviewCount();
-        this.score = productRequestDto.getScore();
-    }
-
-    public void update(long totalCount, double average) {
-        this.reviewCount = totalCount;
-        this.score = average;
+    public void updateQuantity(Long quantity) {
+        this.quantity = quantity;
     }
 }
