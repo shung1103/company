@@ -3,12 +3,13 @@ package org.hanghae99.company.product.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hanghae99.company.common.entity.TimeStamped;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @Table(name = "ProductUserNotificationHistory")
-public class ProductUserNotificationHistory {
+public class ProductUserNotificationHistory extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
