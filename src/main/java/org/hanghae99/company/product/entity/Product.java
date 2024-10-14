@@ -15,14 +15,10 @@ public class Product {
     private Long id;
 
     @Column(nullable = false)
-    private Long quantity;
-
-    @Column(nullable = false)
     private Long restockCount;
 
-    public void updateReStockCount(Long restockCount) { this.restockCount = restockCount; }
+    @Column(nullable = false)
+    private Boolean stockStatus;
 
-    public void updateQuantity(Long quantity) {
-        this.quantity = quantity;
-    }
+    public void updateReStockCount(Long restockCount) { this.restockCount = restockCount; }
 }

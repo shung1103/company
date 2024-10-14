@@ -1,4 +1,4 @@
-package org.hanghae99.company.product.entity;
+package org.hanghae99.company.notification.product_user_notification.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;

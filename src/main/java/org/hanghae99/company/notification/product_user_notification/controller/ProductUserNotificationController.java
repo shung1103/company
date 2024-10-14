@@ -1,8 +1,8 @@
-package org.hanghae99.company.product.controller;
+package org.hanghae99.company.notification.product_user_notification.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.hanghae99.company.common.dto.ApiResponseDto;
-import org.hanghae99.company.product.service.ProductService;
+import org.hanghae99.company.notification.product_user_notification.service.ProductUserNotificationService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,16 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping
-public class ProductController {
-    private final ProductService productService;
-
-    @PostMapping("/products/{productId}/notifications/re-stock")
-    public ResponseEntity<ApiResponseDto> sendReStockNotification(@PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.OK).body(productService.sendReStockNotification(productId));
-    }
+public class ProductUserNotificationController {
+    private final ProductUserNotificationService productUserNotificationService;
 
     @PostMapping("/admin/products/{productId}/notifications/re-stock")
     public ResponseEntity<ApiResponseDto> sendReStockNotificationAdmin(@PathVariable Long productId) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(productService.sendReStockNotificationAdmin(productId));
+        return ResponseEntity.status(HttpStatus.CREATED).body(productUserNotificationService.sendReStockNotificationAdmin(productId));
     }
 }

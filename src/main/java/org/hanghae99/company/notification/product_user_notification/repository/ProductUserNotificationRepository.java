@@ -1,6 +1,6 @@
-package org.hanghae99.company.product.repository;
+package org.hanghae99.company.notification.product_user_notification.repository;
 
-import org.hanghae99.company.product.entity.ProductUserNotification;
+import org.hanghae99.company.notification.product_user_notification.entity.ProductUserNotification;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Queue;
