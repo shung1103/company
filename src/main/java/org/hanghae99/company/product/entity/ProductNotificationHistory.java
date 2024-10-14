@@ -8,7 +8,7 @@ import org.hanghae99.company.common.entity.TimeStamped;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "ProductNotificationHistory")
+@Table(name = "Product_notification_history")
 public class ProductNotificationHistory extends TimeStamped {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

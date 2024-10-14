@@ -1,5 +1,6 @@
 package org.hanghae99.company.product.service;
 
+import io.github.bucket4j.Bucket;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.hanghae99.company.common.dto.ApiResponseDto;
@@ -23,6 +24,7 @@ public class ProductService {
     private final ProductNotificationHistoryRepository productNotificationHistoryRepository;
     private final ProductUserNotificationRepository productUserNotificationRepository;
     private final ProductUserNotificationHistoryRepository notificationHistoryRepository;
+    private final Bucket bucket;
 
     @Transactional
     public ApiResponseDto sendReStockNotification(Long productId) {
@@ -33,6 +35,8 @@ public class ProductService {
 
         long quantityNow = product.getQuantity();
         while (quantityNow != 0 && !userNotificationList.isEmpty()) {
+            if (!bucket.tryConsume(1)) continue;
+
             ProductUserNotification curUser = userNotificationList.poll();
             ProductNotificationHistory productNotificationHistory = new ProductNotificationHistory(curUser.getId(), productId, restockCountNow);
             productNotificationHistoryRepository.save(productNotificationHistory);

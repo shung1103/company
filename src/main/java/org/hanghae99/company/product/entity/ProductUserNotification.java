@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-@Table(name = "ProductUserNotification")
+@Table(name = "Product_user_notification")
 public class ProductUserNotification {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
