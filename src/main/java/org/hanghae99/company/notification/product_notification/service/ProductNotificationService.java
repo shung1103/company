@@ -28,32 +28,38 @@ public class ProductNotificationService {
 
     @Transactional
     public ApiResponseDto sendReStockNotification(Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("Product not found"));
-        long restockCountNow = product.getRestockCount() + 1;
-        product.updateReStockCount(restockCountNow);
-        Queue<ProductUserNotification> userNotificationList = productUserNotificationRepository.findAllByProductId(productId);
-
-        while (product.getStockStatus() && !userNotificationList.isEmpty()) {
-            if (!bucket.tryConsume(1)) continue;
-
-            ProductUserNotification curUser = userNotificationList.poll();
-            ProductNotificationHistory productNotificationHistory = new ProductNotificationHistory(curUser.getId(), productId, restockCountNow);
-            productNotificationHistoryRepository.save(productNotificationHistory);
-            productUserNotificationRepository.delete(curUser);
+        ProductUserNotificationHistory productUserNotificationHistory;
+        if (notificationHistoryRepository.existsByProductId(productId)) {
+            productUserNotificationHistory = notificationHistoryRepository.findByProductId(productId);
+            productUserNotificationHistory.updateNotificationStatus("IN_PROGRESS");
+            notificationHistoryRepository.save(productUserNotificationHistory);
+        } else {
+            productUserNotificationHistory = new ProductUserNotificationHistory(productId, "IN_PROGRESS");
+            notificationHistoryRepository.save(productUserNotificationHistory);
         }
 
-        ProductUserNotificationHistory productUserNotificationHistory;
+        try {
+            Product product = productRepository.findById(productId).orElseThrow(() -> new NullPointerException("Product not found"));
+            long restockCountNow = product.getRestockCount() + 1;
+            product.updateReStockCount(restockCountNow);
+            Queue<ProductUserNotification> userNotificationList = productUserNotificationRepository.findAllByProductId(productId);
 
-        if (notificationHistoryRepository.existsByProductId(productId)) productUserNotificationHistory = notificationHistoryRepository.findByProductId(productId);
-        else productUserNotificationHistory = new ProductUserNotificationHistory(productId, "");
+            while (product.getStockStatus() && !userNotificationList.isEmpty()) {
+                if (!bucket.tryConsume(1)) continue;
 
-        if (product.getStockStatus() && productUserNotificationRepository.existsByProductId(productId)) productUserNotificationHistory.updateNotificationStatus("IN_PROGRESS");
-        else if (!product.getStockStatus() && productUserNotificationRepository.existsByProductId(productId)) productUserNotificationHistory.updateNotificationStatus("CANCELED_BY_SOLD_OUT");
-        else if (product.getStockStatus() && !productUserNotificationRepository.existsByProductId(productId)) productUserNotificationHistory.updateNotificationStatus("COMPLETED");
-        else productUserNotificationHistory.updateNotificationStatus("CANCELED_BY_ERROR");
+                ProductUserNotification curUser = userNotificationList.poll();
+                ProductNotificationHistory productNotificationHistory = new ProductNotificationHistory(curUser.getId(), productId, restockCountNow);
+                productNotificationHistoryRepository.save(productNotificationHistory);
+                productUserNotificationRepository.delete(curUser);
+            }
 
-        notificationHistoryRepository.save(productUserNotificationHistory);
+            if (!product.getStockStatus()) productUserNotificationHistory.updateNotificationStatus("CANCELED_BY_SOLD_OUT");
+            else productUserNotificationHistory.updateNotificationStatus("COMPLETED");
 
-        return new ApiResponseDto("알림이 발송 되었습니다", HttpStatus.OK.value());
+            return new ApiResponseDto("알림이 발송 되었습니다", HttpStatus.OK.value());
+        } catch (Exception e) {
+            productUserNotificationHistory.updateNotificationStatus("CANCELED_BY_ERROR");
+            return new ApiResponseDto("알림이 발송 되었습니다", HttpStatus.OK.value());
+        }
     }
 }
